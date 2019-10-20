@@ -15,6 +15,11 @@
         }
     },
     "autoload": {
+        "psr-4": {
+            "Crusj\\Bucket\\": "./"
+        },
+        "files": [
+        ]
     },
     "require": {
         "php": ">=7.3"

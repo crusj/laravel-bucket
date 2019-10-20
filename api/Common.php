@@ -19,11 +19,21 @@ class Common extends Controller
     //成功
     public function success($data = [])
     {
-        throw new ResponseException(new SuccessResponse($data));
+        self::httpSuccess($data);
     }
 
     //失败
     public function fail($data = [])
+    {
+        self::httpFail($data);
+    }
+
+    public static function httpSuccess($data = [])
+    {
+        throw new ResponseException(new SuccessResponse($data));
+    }
+
+    public static function httpFail($data = [])
     {
         throw new ResponseException(new FailResponse($data));
     }
