@@ -1,0 +1,33 @@
+{
+    "name": "crusj/bucket",
+    "description": "laravel bucket",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "crusj",
+            "email": "296769589@qq.com"
+        }
+    ],
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    },
+    "autoload": {
+    },
+    "require": {
+        "php": ">=7.3"
+    },
+    "extra": {
+        "laravel": {
+            "provider": [
+                "Crusj\\Bucket\\BucketServiceProvider"
+            ],
+            "aliases": [
+
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
