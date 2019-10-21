@@ -10,3 +10,8 @@
 * 新的api接口类继承Common,Common里是接口成功或失败返回的方法,目前存在success和fail,可以扩展
 * 可在config/bucket.php配置返回的状态码
 
+## factory
+
+* 所有逻辑类放在app/services下，该目录下会生成ServiceFactory类
+* 使用`php artisan bucket:rs className`注册类到ServiceFactory
+* 使用ServiceFactory::className()将生成该逻辑类的实例
