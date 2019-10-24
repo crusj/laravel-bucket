@@ -17,7 +17,7 @@ use App\Services\ServiceFactory;
 class RegisterService extends Command
 {
     protected $signature = 'bucket:rs {name}';
-    protected $description = 'register service to Services/Common';
+    protected $description = 'register service to app/Services/ServiceFactory';
 
     public function __construct()
     {

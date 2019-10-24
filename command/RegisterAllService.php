@@ -11,10 +11,15 @@ namespace Crusj\Bucket\Command;
 use App\Services\ServiceFactory;
 use Illuminate\Console\Command;
 
+/**
+ * 注册所有逻辑服务类
+ * Class RegisterAllService
+ * @package Crusj\Bucket\Command
+ */
 class RegisterAllService extends Command
 {
     protected $signature = 'bucket:rsa';
-    protected $description = 'register all services to Services/Common';
+    protected $description = 'register all services to app/Services/ServiceFactory';
 
     public function __construct()
     {
@@ -91,14 +96,14 @@ class RegisterAllService extends Command
             $method = lcfirst($item);
             $methods[] = sprintf(" * @method %s", "$item $method(\$refresh = true) static");
         }
-        
+
         array_splice($eachLine, $insertPosition, 0, $methods);
         $newDoc = join(PHP_EOL, $eachLine);
-        
+
         $commonServicePath = app_path('Services/serviceFactory.php');
         $content = file_get_contents($commonServicePath);
         $newContent = str_replace($docs, $newDoc, $content);
-        
+
         file_put_contents($commonServicePath, $newContent);
         $registerClass = "";
         echo array_reduce($classNames,function ($carry,$item){
