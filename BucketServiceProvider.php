@@ -6,6 +6,8 @@
 
 namespace Crusj\Bucket;
 
+use Crusj\Bucket\Command\RegisterService;
+use Crusj\Bucket\Command\RegisterAllService;
 use Illuminate\Support\ServiceProvider;
 
 class BucketServiceProvider extends ServiceProvider
@@ -20,6 +22,14 @@ class BucketServiceProvider extends ServiceProvider
             __DIR__ . '/config/bucket.php' => config_path('bucket.php'),//配置文件
             __DIR__ . '/apiException'      => app_path('Http/apiException'),
             __DIR__ . '/api'               => app_path('Http/Controllers/api'),
+            __DIR__ . '/service'           => app_path('Services'),//逻辑服务
         ]);
+        //注册命令
+        if($this->app->runningInConsole()){
+            $this->commands([
+                RegisterService::class,
+                RegisterAllService::class,
+            ]);
+        }
     }
 }

@@ -30,7 +30,7 @@ class RegisterService extends Command
         if (empty($name)) {
             echo sprintf('name不能为空');
         }
-        $this->addMethodToDoc($name);
+        self::addMethodToDoc($name);
     }
 
     /**
@@ -38,20 +38,24 @@ class RegisterService extends Command
      * @param $className
      * @throws \ReflectionException
      */
-    private function addMethodToDoc($className)
+    public static function addMethodToDoc($className)
     {
         $ref = new \ReflectionClass(ServiceFactory::class);
         $docs = $ref->getDocComment();
         $eachLine = explode(PHP_EOL, $docs);
         $className = ucfirst($className);
-        if(!is_file(app_path('Services/'.$className.'.php'))){
-            echo sprintf("类文件%s不存在\n",app('Services/'.$className.'.php'));
+        if (!is_file(app_path('Services/' . $className . '.php'))) {
+            echo sprintf("类文件%s不存在\n", app_path('Services/' . $className . '.php'));
             return;
         }
         $method = lcfirst($className);
         $method = sprintf(" * @method %s", "$className $method(\$refresh = true) static");
         $index = 3;
         foreach ($eachLine as $key => $item) {
+            if ($item = $method) {
+                echo sprintf("类App\Services\%s已经注册\n", $className);
+                return;
+            }
             if (strpos($item, '@method') !== false) {
                 $index = $key + 1;
             }
