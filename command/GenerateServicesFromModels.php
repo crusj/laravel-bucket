@@ -95,7 +95,7 @@ class GenerateServicesFromModels extends Command
         $successMsg = array_reduce($success, function ($carry, $item) {
             return $carry .= app_path('Service') . '/' . $item . "\n";
         }, "以下服务类生成成功:\n");
-        echo $success;
+        echo $successMsg;
         echo $failMsg;
     }
 
