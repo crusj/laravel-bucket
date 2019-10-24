@@ -38,9 +38,9 @@ class RegisterService extends Command
      * @param $className
      * @throws \ReflectionException
      */
-    public static function addMethodToDoc($className)
+    public function addMethodToDoc($className)
     {
-        $ref = new \ReflectionClass(ServiceFactory::class);
+        $ref = new \ReflectionObject(new ServiceFactory());
         $docs = $ref->getDocComment();
         $eachLine = explode(PHP_EOL, $docs);
         $className = ucfirst($className);

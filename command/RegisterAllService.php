@@ -8,6 +8,7 @@
 namespace Crusj\Bucket\Command;
 
 
+use App\Services\ServiceFactory;
 use Illuminate\Console\Command;
 
 class RegisterAllService extends Command
@@ -22,10 +23,9 @@ class RegisterAllService extends Command
 
     public function handle()
     {
-        $className = $this->getAllClassNames();
-        foreach ($className as $item) {
-            RegisterService::addMethodToDoc($item);
-        }
+        $classNames = $this->getAllClassNames();
+        $validNames = $this->filterRegisteredService($classNames);//有效类名
+        $this->addMethodsToDocBatch($validNames);
     }
 
     private function getAllClassNames(): array
@@ -33,7 +33,7 @@ class RegisterAllService extends Command
         $path = app_path('Services');
         $files = array();
         if ($head = opendir($path)) {
-            while ($file = readdir($head) !== false) {
+            while (($file = readdir($head)) !== false) {
                 if ($file != ".." && $file != ".") {
                     $className = explode('.', $file);
                     if ($className[0] != 'ServiceFactory') {
@@ -44,6 +44,66 @@ class RegisterAllService extends Command
         }
         closedir($head);
         return $files;
+    }
+
+    /**
+     * 过滤已经注册的service
+     * @param array $classNames
+     * @return array
+     */
+    private function filterRegisteredService(array $classNames): array
+    {
+        $alreadyClassNames = [];
+
+        $ref = new \ReflectionClass(ServiceFactory::class);
+        $docs = $ref->getDocComment();
+        $eachLine = explode(PHP_EOL, $docs);
+        $pattern = '/^.*@method ([a-zA-Z]+) .*$/';
+        foreach ($eachLine as $key => $item) {
+            if (preg_match($pattern, $item, $match) == 1) {
+                $alreadyClassNames[] = $match[1];
+            }
+        }
+        return array_diff($classNames, $alreadyClassNames);
+    }
+
+    /**
+     * 批量注册服务
+     * @param array $classNames
+     */
+    private function addMethodsToDocBatch(array $classNames)
+    {
+        $ref = new \ReflectionClass(ServiceFactory::class);
+        $docs = $ref->getDocComment();
+        //找到最后一位
+        $eachLine = explode(PHP_EOL, $docs);
+        for ($i = 3; $i < count($eachLine); $i++) {
+            if (strpos($eachLine[$i], '@method') !== false) {
+                continue;
+            } else {
+                break;
+            }
+        }
+        $insertPosition = $i;
+        $methods = [];
+        foreach ($classNames as $item){
+            $item = ucfirst($item);
+            $method = lcfirst($item);
+            $methods[] = sprintf(" * @method %s", "$item $method(\$refresh = true) static");
+        }
+        
+        array_splice($eachLine, $insertPosition, 0, $methods);
+        $newDoc = join(PHP_EOL, $eachLine);
+        
+        $commonServicePath = app_path('Services/serviceFactory.php');
+        $content = file_get_contents($commonServicePath);
+        $newContent = str_replace($docs, $newDoc, $content);
+        
+        file_put_contents($commonServicePath, $newContent);
+        $registerClass = "";
+        echo array_reduce($classNames,function ($carry,$item){
+            return $carry .= app_path("Services").'/'.$item."\n";
+        },"以下类注册成功:\n");
     }
 
 }
