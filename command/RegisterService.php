@@ -52,7 +52,7 @@ class RegisterService extends Command
         $method = sprintf(" * @method %s", "$className $method(\$refresh = true) static");
         $index = 3;
         foreach ($eachLine as $key => $item) {
-            if ($item = $method) {
+            if ($item == $method) {
                 echo sprintf("类App\Services\%s已经注册\n", $className);
                 return;
             }
