@@ -26,7 +26,7 @@
     },
     "extra": {
         "laravel": {
-            "provider": [
+            "providers": [
                 "Crusj\\Bucket\\BucketServiceProvider"
             ],
             "aliases": [
