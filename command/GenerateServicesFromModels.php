@@ -78,14 +78,25 @@ class GenerateServicesFromModels extends Command
     private function generateServices(array $modelNames)
     {
         $dir = app_path('Services');
+        $success = [];
+        $fail = [];
         foreach ($modelNames as $item) {
             $fileName = $dir . '/' . $item . '.php';
             if (is_file($fileName)) {
-                echo sprintf("类文件:%s,已经存在\n", $fileName);
+                $fail[] = $fileName;
             } else {
+                $success[] = $fileName;
                 file_put_contents($fileName, $this->generateContentByModelName($item));
             }
         }
+        $failMsg = array_reduce($fail, function ($carry, $item) {
+            return $carry .= app_path('Service') . '/' . $item . "\n";
+        }, "以下服务类生成失败:服务类存在\n");
+        $successMsg = array_reduce($success, function ($carry, $item) {
+            return $carry .= app_path('Service') . '/' . $item . "\n";
+        }, "以下服务类生成成功:\n");
+        echo $success;
+        echo $failMsg;
     }
 
     private function generateContentByModelName(string $name): string
