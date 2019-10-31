@@ -4,11 +4,18 @@
 * `composer require crusj/laravel-bucket`
 * `php artisan vendor:publish --provider="Crusj\Bucket\BucketServiceProvider"`
 
-## api
+## 增加文件
+* app/Models/ModelFactory.php 数据模型工厂类
+* app/Services/ServiceFactory.php 逻辑服务工厂类
+* app/Http/apiException api异常类,可扩展
+* app/Http/Controllers/Api api接口目录
+* app/Config/bucket.php 配置文件
 
-* app/Http目录下会生成apiException与Controllers/api/Common
+## api
+* app/Http目录下会生成apiException与Controllers/Api/Common
 * 新的api接口类继承Common,Common里是接口成功或失败返回的方法,目前存在success和fail,可以扩展
 * 可在config/bucket.php配置返回的状态码
+* `php artisan bucket:gi`根据app/Models下的数据模型类生成对应的api类到app/Http/Controllers/Api
 
 ## factory
 
@@ -19,4 +26,3 @@
 * `php artisan bucket:gs`根据app/Models下的数据模型类生成对应的逻辑服务类到app/Services
 * `php artisan bucket:rm`注册app/Models/类到ModelFactory
 * `php artisan bucket:rma`注册app/Models/所有类到ModelFactory
-* `php artisan bucket:gi`根据app/Models下的数据模型类生成对应的api类到app/Http/Controllers/Api
