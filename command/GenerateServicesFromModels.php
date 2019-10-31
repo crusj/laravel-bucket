@@ -16,7 +16,7 @@ use Illuminate\Console\Command;
 class GenerateServicesFromModels extends Command
 {
     protected $signature = 'bucket:gs';
-    protected $description = 'generate services from app/Models/*';
+    protected $description = 'Generate services from app/Models/*';
 
     public function __construct()
     {

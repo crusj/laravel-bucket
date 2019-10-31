@@ -8,18 +8,18 @@
 namespace Crusj\Bucket\Command;
 
 
-use App\Services\ServiceFactory;
+use App\Models\ModelFactory;
 use Illuminate\Console\Command;
 
 /**
- * 注册所有逻辑服务类
- * Class RegisterAllService
+ * 注册所有数据服务类
+ * Class RegisterAllModels
  * @package Crusj\Bucket\Command
  */
-class RegisterAllService extends Command
+class RegisterAllModels extends Command
 {
-    protected $signature = 'bucket:rsa';
-    protected $description = 'register all services to app/Services/ServiceFactory';
+    protected $signature = 'bucket:rma';
+    protected $description = 'Register all models to app/Models/ModelFactory';
 
     public function __construct()
     {
@@ -29,19 +29,19 @@ class RegisterAllService extends Command
     public function handle()
     {
         $classNames = $this->getAllClassNames();
-        $validNames = $this->filterRegisteredService($classNames);//有效类名
+        $validNames = $this->filterRegisteredModel($classNames);//有效类名
         $this->addMethodsToDocBatch($validNames);
     }
 
     private function getAllClassNames(): array
     {
-        $path = app_path('Services');
+        $path = app_path('Models');
         $files = array();
         if ($head = opendir($path)) {
             while (($file = readdir($head)) !== false) {
                 if ($file != ".." && $file != ".") {
                     $className = explode('.', $file);
-                    if ($className[0] != 'ServiceFactory') {
+                    if ($className[0] != 'ModelFactory') {
                         $files[] = $className[0];
                     }
                 }
@@ -52,15 +52,15 @@ class RegisterAllService extends Command
     }
 
     /**
-     * 过滤已经注册的service
+     * 过滤已经注册的Model
      * @param array $classNames
      * @return array
      */
-    private function filterRegisteredService(array $classNames): array
+    private function filterRegisteredModel(array $classNames): array
     {
         $alreadyClassNames = [];
 
-        $ref = new \ReflectionClass(ServiceFactory::class);
+        $ref = new \ReflectionClass(ModelFactory::class);
         $docs = $ref->getDocComment();
         $eachLine = explode(PHP_EOL, $docs);
         $pattern = '/^.*@method ([a-zA-Z]+) .*$/';
@@ -73,12 +73,12 @@ class RegisterAllService extends Command
     }
 
     /**
-     * 批量注册服务
+     * 批量注册数据
      * @param array $classNames
      */
     private function addMethodsToDocBatch(array $classNames)
     {
-        $ref = new \ReflectionClass(ServiceFactory::class);
+        $ref = new \ReflectionClass(ModelFactory::class);
         $docs = $ref->getDocComment();
         //找到最后一位
         $eachLine = explode(PHP_EOL, $docs);
@@ -100,14 +100,13 @@ class RegisterAllService extends Command
         array_splice($eachLine, $insertPosition, 0, $methods);
         $newDoc = join(PHP_EOL, $eachLine);
 
-        $commonServicePath = app_path('Services/serviceFactory.php');
-        $content = file_get_contents($commonServicePath);
+        $commonModelPath = app_path('Models/serviceFactory.php');
+        $content = file_get_contents($commonModelPath);
         $newContent = str_replace($docs, $newDoc, $content);
 
-        file_put_contents($commonServicePath, $newContent);
-        $registerClass = "";
+        file_put_contents($commonModelPath, $newContent);
         echo array_reduce($classNames,function ($carry,$item){
-            return $carry .= app_path("Services").'/'.$item."\n";
+            return $carry .= app_path("Models").'/'.$item."\n";
         },"以下类注册成功:\n");
     }
 

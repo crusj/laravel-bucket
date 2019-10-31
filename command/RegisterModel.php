@@ -6,18 +6,18 @@
 
 namespace Crusj\Bucket\Command;
 
+use App\Models\ModelFactory;
 use Illuminate\Console\Command;
-use App\Services\ServiceFactory;
 
 /**
- * 注册逻辑服务
- * Class RegisterService
+ * 注册数据服务
+ * Class RegisterModel
  * @package Crusj\Bucket\Command
  */
-class RegisterService extends Command
+class RegisterModel extends Command
 {
-    protected $signature = 'bucket:rs {name}';
-    protected $description = 'Register service to app/Services/ServiceFactory';
+    protected $signature = 'bucket:rm {name}';
+    protected $description = 'Register model to app/Models/ModelFactory';
 
     public function __construct()
     {
@@ -40,12 +40,12 @@ class RegisterService extends Command
      */
     public function addMethodToDoc($className)
     {
-        $ref = new \ReflectionObject(new ServiceFactory());
+        $ref = new \ReflectionObject(new ModelFactory());
         $docs = $ref->getDocComment();
         $eachLine = explode(PHP_EOL, $docs);
         $className = ucfirst($className);
-        if (!is_file(app_path('Services/' . $className . '.php'))) {
-            echo sprintf("类文件%s不存在\n", app_path('Services/' . $className . '.php'));
+        if (!is_file(app_path('Models/' . $className . '.php'))) {
+            echo sprintf("类文件%s不存在\n", app_path('Models/' . $className . '.php'));
             return;
         }
         $method = lcfirst($className);
@@ -53,7 +53,7 @@ class RegisterService extends Command
         $index = 3;
         foreach ($eachLine as $key => $item) {
             if ($item == $method) {
-                echo sprintf("类App\Services\%s已经注册\n", $className);
+                echo sprintf("类App\Models\%s已经注册\n", $className);
                 return;
             }
             if (strpos($item, '@method') !== false) {
@@ -62,10 +62,10 @@ class RegisterService extends Command
         }
         array_splice($eachLine, $index, 0, $method);
         $newDoc = join(PHP_EOL, $eachLine);
-        $commonServicePath = app_path('Services/serviceFactory.php');
+        $commonServicePath = app_path('Models/serviceFactory.php');
         $content = file_get_contents($commonServicePath);
         $newContent = str_replace($docs, $newDoc, $content);
         file_put_contents($commonServicePath, $newContent);
-        echo sprintf("已将App\Services\%s注册至App\Services\ServiceFactory\n", $className);
+        echo sprintf("已将App\Models\%s注册至App\Models\ServiceFactory\n", $className);
     }
 }

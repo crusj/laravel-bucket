@@ -7,8 +7,10 @@
 namespace Crusj\Bucket;
 
 use Crusj\Bucket\Command\GenerateServicesFromModels;
+use Crusj\Bucket\Command\RegisterAllModels;
+use Crusj\Bucket\Command\RegisterModel;
 use Crusj\Bucket\Command\RegisterService;
-use Crusj\Bucket\Command\RegisterAllService;
+use Crusj\Bucket\Command\RegisterAllServices;
 use Illuminate\Support\ServiceProvider;
 
 class BucketServiceProvider extends ServiceProvider
@@ -30,8 +32,10 @@ class BucketServiceProvider extends ServiceProvider
         if($this->app->runningInConsole()){
             $this->commands([
                 RegisterService::class,
-                RegisterAllService::class,
+                RegisterAllServices::class,
                 GenerateServicesFromModels::class,
+                RegisterModel::class,
+                RegisterAllModels::class,
             ]);
         }
     }
