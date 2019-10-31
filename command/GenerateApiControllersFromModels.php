@@ -138,7 +138,6 @@ $use
 $class
 
 EOT;
-        echo $content;
 
         return $content;
     }
