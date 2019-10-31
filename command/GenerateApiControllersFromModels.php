@@ -27,10 +27,8 @@ class  GenerateApiControllersFromModels extends Command
     {
         $modelNames = $this->getModelNames();//获取所有数据模型类
         $validModelNames = $this->filterModelNames($modelNames);//过滤
-        $parent = config('bucket.parent_api');
-        if(!empty($parent)){
-            $validModelNames[] = $parent;
-        }
+        $validModelNames = array_merge($validModelNames, config('bucket.extra_api'));
+        $validModelNames = array_unique($validModelNames);
         $this->generateApiControllres($validModelNames);//生成服务逻辑类文件
     }
 
@@ -97,10 +95,10 @@ class  GenerateApiControllersFromModels extends Command
             }
         }
         $failMsg = array_reduce($fail, function ($carry, $item) use ($dir) {
-            return $carry .= $dir . '/' . $item . "\n";
-        }, "以下api类生成失败:\n");
+            return $carry .= $item . "\n";
+        }, "以下api类由于已经存在生成失败:\n");
         $successMsg = array_reduce($success, function ($carry, $item) use ($dir) {
-            return $carry .= $dir . '/' . $item . "\n";
+            return $carry .= $item . "\n";
         }, "以下api类生成成功:\n");
         echo $successMsg;
         if (!empty($fail)) {
@@ -117,15 +115,16 @@ class {$name} extends {$parent}
 {
 }
 EOT;
+            $use = "";
         } else {
             $class = <<<EOT
 class {$name} extends Controller
 {
 }
 EOT;
-
+            $use = "use App\Http\Controllers\Controller;";
         }
-        $date = 'Y/m/d h:i';
+        $date = date('Y/m/d h:i');
         $content = <<<EOT
 <?php
 /**
@@ -134,11 +133,12 @@ EOT;
  */
  
 namespace App\Http\Controllers\Api;
-use App\Http\Controllers\Controller;
+$use
 
 $class
 
 EOT;
+        echo $content;
 
         return $content;
     }

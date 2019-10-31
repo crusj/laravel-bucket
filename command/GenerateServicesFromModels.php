@@ -27,10 +27,8 @@ class GenerateServicesFromModels extends Command
     {
         $modelNames = $this->getModelNames();//获取所有数据模型类
         $validModelNames = $this->filterModelNames($modelNames);//过滤
-        $parent = config('bucket.parent_service');
-        if(!empty($parent)){
-            $validModelNames[] = $parent;
-        }
+        $validModelNames = array_merge($validModelNames,config('bucket.extra_service'));
+        $validModelNames = array_unique($validModelNames);
         $this->generateServices($validModelNames);//生成服务逻辑类文件
     }
 
@@ -94,10 +92,10 @@ class GenerateServicesFromModels extends Command
             }
         }
         $failMsg = array_reduce($fail, function ($carry, $item) use ($dir) {
-            return $carry .= $dir . '/' . $item . "\n";
-        }, "以下服务类生成失败:\n");
-        $successMsg = array_reduce($success, function ($carry, $item) {
-            return $carry .= $dir . '/' . $item . "\n";
+            return $carry .= $item . "\n";
+        }, "以下服务类由于已经存在生成失败:\n");
+        $successMsg = array_reduce($success, function ($carry, $item) use($dir){
+            return $carry .= $item . "\n";
         }, "以下服务类生成成功:\n");
         echo $successMsg;
         if (!empty($fail)) {
