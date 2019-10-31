@@ -6,6 +6,7 @@
 
 namespace Crusj\Bucket;
 
+use Crusj\Bucket\Command\GenerateApiControllersFromModels;
 use Crusj\Bucket\Command\GenerateServicesFromModels;
 use Crusj\Bucket\Command\RegisterAllModels;
 use Crusj\Bucket\Command\RegisterModel;
@@ -36,6 +37,7 @@ class BucketServiceProvider extends ServiceProvider
                 GenerateServicesFromModels::class,
                 RegisterModel::class,
                 RegisterAllModels::class,
+                GenerateApiControllersFromModels::class
             ]);
         }
     }

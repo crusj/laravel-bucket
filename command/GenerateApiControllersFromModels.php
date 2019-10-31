@@ -9,14 +9,14 @@ namespace Crusj\Bucket\Command;
 use Illuminate\Console\Command;
 
 /**
- * 根据数据模型生成对应的逻辑服务类
- * Class GenerateServicesFromModels
+ * 根据数据模型生成对应的控制器类
+ * Class GenerateApiControllersFromModels
  * @package Crusj\Bucket\Command
  */
-class GenerateServicesFromModels extends Command
+class  GenerateApiControllersFromModels extends Command
 {
-    protected $signature = 'bucket:gs';
-    protected $description = 'Generate services from app/Models/*';
+    protected $signature = 'bucket:gi';
+    protected $description = 'Generate api controllers from app/Models/*';
 
     public function __construct()
     {
@@ -27,11 +27,11 @@ class GenerateServicesFromModels extends Command
     {
         $modelNames = $this->getModelNames();//获取所有数据模型类
         $validModelNames = $this->filterModelNames($modelNames);//过滤
-        $parent = config('bucket.parent_service');
+        $parent = config('bucket.parent_api');
         if(!empty($parent)){
             $validModelNames[] = $parent;
         }
-        $this->generateServices($validModelNames);//生成服务逻辑类文件
+        $this->generateApiControllres($validModelNames);//生成服务逻辑类文件
     }
 
     /**
@@ -76,12 +76,15 @@ class GenerateServicesFromModels extends Command
     }
 
     /**
-     * 生成逻辑服务类
+     * 生成api控制器类
      * @param array $modelNames
      */
-    private function generateServices(array $modelNames)
+    private function generateApiControllres(array $modelNames)
     {
-        $dir = app_path('Services');
+        $dir = app_path('Http/Controllers/Api');
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
         $success = [];
         $fail = [];
         foreach ($modelNames as $item) {
@@ -95,10 +98,10 @@ class GenerateServicesFromModels extends Command
         }
         $failMsg = array_reduce($fail, function ($carry, $item) use ($dir) {
             return $carry .= $dir . '/' . $item . "\n";
-        }, "以下服务类生成失败:\n");
-        $successMsg = array_reduce($success, function ($carry, $item) {
+        }, "以下api类生成失败:\n");
+        $successMsg = array_reduce($success, function ($carry, $item) use ($dir) {
             return $carry .= $dir . '/' . $item . "\n";
-        }, "以下服务类生成成功:\n");
+        }, "以下api类生成成功:\n");
         echo $successMsg;
         if (!empty($fail)) {
             echo $failMsg;
@@ -107,16 +110,16 @@ class GenerateServicesFromModels extends Command
 
     private function generateContentByModelName(string $name): string
     {
-        $parentService = config('bucket.parent_service');
-        if (!empty($parentService) && $name != $parentService) {
+        $parent = config('bucket.parent_api');
+        if (!empty($parent) && $parent != $name) {
             $class = <<<EOT
-class {$name} extends {$parentService}
+class {$name} extends {$parent}
 {
 }
 EOT;
         } else {
             $class = <<<EOT
-class {$name}
+class {$name} extends Controller
 {
 }
 EOT;
@@ -130,7 +133,8 @@ EOT;
  * date   {$date} 
  */
  
-namespace App\Services;
+namespace App\Http\Controllers\Api;
+use App\Http\Controllers\Controller;
 
 $class
 
