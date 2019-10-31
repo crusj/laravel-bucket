@@ -14,6 +14,6 @@ return [
 
 
     'extra_api'  => [],//额外的api控制器类,当通过模型model生成controller时候额外生成的
-    'parent_api' => '',//api控制器父类,通过as生成的类会继承此类
+    'parent_api' => 'Common',//api控制器父类,通过as生成的类会继承此类
 
 ];
