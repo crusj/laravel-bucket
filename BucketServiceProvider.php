@@ -25,7 +25,7 @@ class BucketServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/bucket.php' => config_path('bucket.php'),//配置文件
             __DIR__ . '/apiException'      => app_path('Http/apiException'),
-            __DIR__ . '/api'               => app_path('Http/Controllers/api'),
+            __DIR__ . '/api'               => app_path('Http/Controllers/Api'),
             __DIR__ . '/service'           => app_path('Services'),//逻辑服务文件夹
             __DIR__ . '/model'           => app_path('Models'),//数据模型文件夹
         ]);
