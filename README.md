@@ -19,3 +19,4 @@
 * `php artisan bucket:gs`根据app/Models下的数据模型类生成对应的逻辑服务类到app/Services
 * `php artisan bucket:rm`注册app/Models/类到ModelFactory
 * `php artisan bucket:rma`注册app/Models/所有类到ModelFactory
+* `php artisan bucket:gi`根据app/Models下的数据模型类生成对应的逻辑服务类到app/Http/Controllers/Api
