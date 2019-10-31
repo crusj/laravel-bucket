@@ -100,7 +100,7 @@ class RegisterAllModels extends Command
         array_splice($eachLine, $insertPosition, 0, $methods);
         $newDoc = join(PHP_EOL, $eachLine);
 
-        $commonModelPath = app_path('Models/serviceFactory.php');
+        $commonModelPath = app_path('Models/ModelFactory.php');
         $content = file_get_contents($commonModelPath);
         $newContent = str_replace($docs, $newDoc, $content);
 

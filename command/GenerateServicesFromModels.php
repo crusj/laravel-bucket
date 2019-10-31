@@ -91,12 +91,14 @@ class GenerateServicesFromModels extends Command
         }
         $failMsg = array_reduce($fail, function ($carry, $item) {
             return $carry .= app_path('Service') . '/' . $item . "\n";
-        }, "以下服务类生成失败:服务类存在\n");
+        }, "以下服务类生成失败:\n");
         $successMsg = array_reduce($success, function ($carry, $item) {
             return $carry .= app_path('Service') . '/' . $item . "\n";
         }, "以下服务类生成成功:\n");
         echo $successMsg;
-        echo $failMsg;
+        if(!empty($fail)){
+            echo $failMsg;
+        }
     }
 
     private function generateContentByModelName(string $name): string

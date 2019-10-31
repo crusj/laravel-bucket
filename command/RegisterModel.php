@@ -62,10 +62,10 @@ class RegisterModel extends Command
         }
         array_splice($eachLine, $index, 0, $method);
         $newDoc = join(PHP_EOL, $eachLine);
-        $commonServicePath = app_path('Models/serviceFactory.php');
+        $commonServicePath = app_path('Models/ModelFactory.php');
         $content = file_get_contents($commonServicePath);
         $newContent = str_replace($docs, $newDoc, $content);
         file_put_contents($commonServicePath, $newContent);
-        echo sprintf("已将App\Models\%s注册至App\Models\ServiceFactory\n", $className);
+        echo sprintf("已将App\Models\%s注册至App\Models\ModelFactory\n", $className);
     }
 }

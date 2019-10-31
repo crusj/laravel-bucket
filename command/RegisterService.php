@@ -62,7 +62,7 @@ class RegisterService extends Command
         }
         array_splice($eachLine, $index, 0, $method);
         $newDoc = join(PHP_EOL, $eachLine);
-        $commonServicePath = app_path('Services/serviceFactory.php');
+        $commonServicePath = app_path('Services/ServiceFactory.php');
         $content = file_get_contents($commonServicePath);
         $newContent = str_replace($docs, $newDoc, $content);
         file_put_contents($commonServicePath, $newContent);

@@ -100,7 +100,7 @@ class RegisterAllServices extends Command
         array_splice($eachLine, $insertPosition, 0, $methods);
         $newDoc = join(PHP_EOL, $eachLine);
 
-        $commonServicePath = app_path('Services/serviceFactory.php');
+        $commonServicePath = app_path('Services/ServiceFactory.php');
         $content = file_get_contents($commonServicePath);
         $newContent = str_replace($docs, $newDoc, $content);
 
