@@ -8,7 +8,7 @@
 namespace Crusj\Bucket\Command;
 
 
-use App\Services\ServiceFactory;
+use App\Http\Services\ServiceFactory;
 use Illuminate\Console\Command;
 
 /**

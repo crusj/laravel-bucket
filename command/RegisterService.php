@@ -7,7 +7,7 @@
 namespace Crusj\Bucket\Command;
 
 use Illuminate\Console\Command;
-use App\Services\ServiceFactory;
+use App\Http\Services\ServiceFactory;
 
 /**
  * 注册逻辑服务

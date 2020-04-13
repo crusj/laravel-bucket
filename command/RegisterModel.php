@@ -6,7 +6,7 @@
 
 namespace Crusj\Bucket\Command;
 
-use App\Models\ModelFactory;
+use App\Http\Models\ModelFactory;
 use Illuminate\Console\Command;
 
 /**
