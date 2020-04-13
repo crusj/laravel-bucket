@@ -5,7 +5,7 @@
  */
 
 
-namespace App\Models;
+namespace App\Http\Models;
 
 
 use Crusj\Bucket\ObjectFactory;
@@ -13,7 +13,7 @@ use Crusj\Bucket\ObjectFactory;
 /**
  * 数据模型工厂类
  * Class ModelFactory
- * @package App\Models
+ * @package App\Http\Models
  */
 class ModelFactory extends ObjectFactory
 {

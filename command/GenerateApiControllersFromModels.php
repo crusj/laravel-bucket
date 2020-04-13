@@ -16,7 +16,7 @@ use Illuminate\Console\Command;
 class  GenerateApiControllersFromModels extends Command
 {
     protected $signature = 'bucket:gi';
-    protected $description = 'Generate api controllers from app/Models/*';
+    protected $description = 'Generate api controllers from app/Http/Models/*';
 
     public function __construct()
     {
@@ -38,7 +38,7 @@ class  GenerateApiControllersFromModels extends Command
      */
     private function getModelNames(): array
     {
-        $modelPath = app_path('Models');
+        $modelPath = app_path('Http/Models');
         $head = opendir($modelPath);
 
         $modelNames = [];

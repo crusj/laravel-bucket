@@ -17,7 +17,7 @@ use Illuminate\Console\Command;
 class RegisterModel extends Command
 {
     protected $signature = 'bucket:rm {name}';
-    protected $description = 'Register model to app/Models/ModelFactory';
+    protected $description = 'Register model to app/Http/Models/ModelFactory';
 
     public function __construct()
     {
@@ -44,8 +44,8 @@ class RegisterModel extends Command
         $docs = $ref->getDocComment();
         $eachLine = explode(PHP_EOL, $docs);
         $className = ucfirst($className);
-        if (!is_file(app_path('Models/' . $className . '.php'))) {
-            echo sprintf("类文件%s不存在\n", app_path('Models/' . $className . '.php'));
+        if (!is_file(app_path('Http/Models/' . $className . '.php'))) {
+            echo sprintf("类文件%s不存在\n", app_path('Http/Models/' . $className . '.php'));
             return;
         }
         $method = lcfirst($className);
@@ -53,7 +53,7 @@ class RegisterModel extends Command
         $index = 3;
         foreach ($eachLine as $key => $item) {
             if ($item == $method) {
-                echo sprintf("类App\Models\%s已经注册\n", $className);
+                echo sprintf("类App\Http\Models\%s已经注册\n", $className);
                 return;
             }
             if (strpos($item, '@method') !== false) {
@@ -62,10 +62,10 @@ class RegisterModel extends Command
         }
         array_splice($eachLine, $index, 0, $method);
         $newDoc = join(PHP_EOL, $eachLine);
-        $commonServicePath = app_path('Models/ModelFactory.php');
+        $commonServicePath = app_path('Http/Models/ModelFactory.php');
         $content = file_get_contents($commonServicePath);
         $newContent = str_replace($docs, $newDoc, $content);
         file_put_contents($commonServicePath, $newContent);
-        echo sprintf("已将App\Models\%s注册至App\Models\ModelFactory\n", $className);
+        echo sprintf("已将App\Http\Models\%s注册至App\Http\Models\ModelFactory\n", $className);
     }
 }

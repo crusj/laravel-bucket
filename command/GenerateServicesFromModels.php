@@ -16,7 +16,7 @@ use Illuminate\Console\Command;
 class GenerateServicesFromModels extends Command
 {
     protected $signature = 'bucket:gs';
-    protected $description = 'Generate services from app/Models/*';
+    protected $description = 'Generate services from app/Http/Models/*';
 
     public function __construct()
     {
@@ -38,7 +38,7 @@ class GenerateServicesFromModels extends Command
      */
     private function getModelNames(): array
     {
-        $modelPath = app_path('Models');
+        $modelPath = app_path('Http/Models');
         $head = opendir($modelPath);
 
         $modelNames = [];
@@ -79,7 +79,7 @@ class GenerateServicesFromModels extends Command
      */
     private function generateServices(array $modelNames)
     {
-        $dir = app_path('Services');
+        $dir = app_path('Http/Services');
         $success = [];
         $fail = [];
         foreach ($modelNames as $item) {
@@ -128,7 +128,7 @@ EOT;
  * date   {$date} 
  */
  
-namespace App\Services;
+namespace App\Http\Services;
 
 $class
 

@@ -19,7 +19,7 @@ use Illuminate\Console\Command;
 class RegisterAllModels extends Command
 {
     protected $signature = 'bucket:rma';
-    protected $description = 'Register all models to app/Models/ModelFactory';
+    protected $description = 'Register all models to app/Http/Models/ModelFactory';
 
     public function __construct()
     {
@@ -35,7 +35,7 @@ class RegisterAllModels extends Command
 
     private function getAllClassNames(): array
     {
-        $path = app_path('Models');
+        $path = app_path('Http/Models');
         $files = array();
         if ($head = opendir($path)) {
             while (($file = readdir($head)) !== false) {
@@ -100,13 +100,13 @@ class RegisterAllModels extends Command
         array_splice($eachLine, $insertPosition, 0, $methods);
         $newDoc = join(PHP_EOL, $eachLine);
 
-        $commonModelPath = app_path('Models/ModelFactory.php');
+        $commonModelPath = app_path('Http/Models/ModelFactory.php');
         $content = file_get_contents($commonModelPath);
         $newContent = str_replace($docs, $newDoc, $content);
 
         file_put_contents($commonModelPath, $newContent);
         echo array_reduce($classNames,function ($carry,$item){
-            return $carry .= app_path("Models").'/'.$item."\n";
+            return $carry .= app_path("Http/Models").'/'.$item."\n";
         },"以下类注册成功:\n");
     }
 

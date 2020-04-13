@@ -19,7 +19,7 @@ use Illuminate\Console\Command;
 class RegisterAllServices extends Command
 {
     protected $signature = 'bucket:rsa';
-    protected $description = 'Register all services to app/Services/ServiceFactory';
+    protected $description = 'Register all services to app/Http/Services/ServiceFactory';
 
     public function __construct()
     {
@@ -35,7 +35,7 @@ class RegisterAllServices extends Command
 
     private function getAllClassNames(): array
     {
-        $path = app_path('Services');
+        $path = app_path('Http/Services');
         $files = array();
         if ($head = opendir($path)) {
             while (($file = readdir($head)) !== false) {
@@ -100,13 +100,13 @@ class RegisterAllServices extends Command
         array_splice($eachLine, $insertPosition, 0, $methods);
         $newDoc = join(PHP_EOL, $eachLine);
 
-        $commonServicePath = app_path('Services/ServiceFactory.php');
+        $commonServicePath = app_path('Http/Services/ServiceFactory.php');
         $content = file_get_contents($commonServicePath);
         $newContent = str_replace($docs, $newDoc, $content);
 
         file_put_contents($commonServicePath, $newContent);
         echo array_reduce($classNames,function ($carry,$item){
-            return $carry .= app_path("Services").'/'.$item."\n";
+            return $carry .= app_path("Http/Services").'/'.$item."\n";
         },"以下类注册成功:\n");
     }
 

@@ -17,7 +17,7 @@ use App\Services\ServiceFactory;
 class RegisterService extends Command
 {
     protected $signature = 'bucket:rs {name}';
-    protected $description = 'Register service to app/Services/ServiceFactory';
+    protected $description = 'Register service to app/Http/Services/ServiceFactory';
 
     public function __construct()
     {
@@ -44,8 +44,8 @@ class RegisterService extends Command
         $docs = $ref->getDocComment();
         $eachLine = explode(PHP_EOL, $docs);
         $className = ucfirst($className);
-        if (!is_file(app_path('Services/' . $className . '.php'))) {
-            echo sprintf("类文件%s不存在\n", app_path('Services/' . $className . '.php'));
+        if (!is_file(app_path('Http/Services/' . $className . '.php'))) {
+            echo sprintf("类文件%s不存在\n", app_path('Http/Services/' . $className . '.php'));
             return;
         }
         $method = lcfirst($className);
@@ -53,7 +53,7 @@ class RegisterService extends Command
         $index = 3;
         foreach ($eachLine as $key => $item) {
             if ($item == $method) {
-                echo sprintf("类App\Services\%s已经注册\n", $className);
+                echo sprintf("类App\Http\Services\%s已经注册\n", $className);
                 return;
             }
             if (strpos($item, '@method') !== false) {
@@ -62,10 +62,10 @@ class RegisterService extends Command
         }
         array_splice($eachLine, $index, 0, $method);
         $newDoc = join(PHP_EOL, $eachLine);
-        $commonServicePath = app_path('Services/ServiceFactory.php');
+        $commonServicePath = app_path('Http/Services/ServiceFactory.php');
         $content = file_get_contents($commonServicePath);
         $newContent = str_replace($docs, $newDoc, $content);
         file_put_contents($commonServicePath, $newContent);
-        echo sprintf("已将App\Services\%s注册至App\Services\ServiceFactory\n", $className);
+        echo sprintf("已将App\Http\Services\%s注册至App\Http\Services\ServiceFactory\n", $className);
     }
 }
